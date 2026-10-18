@@ -176,13 +176,13 @@ html:lang(uk) {
     filter 0.5s ease;
 }
 
-.logo3d-letter:hover .logo3d-face {
+.logo3d-letter[data-lit] .logo3d-face {
   color: var(--color-ember);
   -webkit-text-stroke-color: rgb(255 228 184 / 0.9);
   filter: drop-shadow(0 0 28px rgb(227 180 108 / 0.45));
 }
 
-.logo3d-letter:hover .logo3d-slice {
+.logo3d-letter[data-lit] .logo3d-slice {
   color: rgb(92 66 30);
   -webkit-text-stroke-color: rgb(227 180 108 / 0.25);
 }

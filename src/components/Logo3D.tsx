@@ -11,6 +11,9 @@ const DEPTH_LAYERS = 12
 const LAYER_GAP = 2.6
 /** letters sit at slightly different depths so the tilt reads as parallax */
 const LETTER_Z = [0, 18, 34, 18, 0]
+/** shared by the 3D letters and their hit zones so both line up */
+const TYPE =
+  "flex text-[clamp(5rem,23vw,21rem)] leading-[0.82] font-black tracking-[-0.04em] [font-family:'Asap_Sharp',sans-serif]"
 
 /**
  * Extruded wordmark: tilts toward the cursor, stands up as it scrolls into view,
@@ -60,9 +63,14 @@ export default function Logo3D() {
         footer.addEventListener('pointermove', onMove as EventListener)
         footer.addEventListener('pointerleave', onLeave)
 
-        // Hover: each letter springs forward with a little twist
+        // Hover: each letter springs forward with a little twist.
+        // Pointer events come from flat, static hit zones — the moving 3D letters would
+        // otherwise slide out from under the cursor (and the tilted edges overlap neighbours).
+        const hits = gsap.utils.toArray<HTMLElement>('[data-hit]')
         const cleanups = letters.map((el, i) => {
-          const enter = () =>
+          const hit = hits[i]
+          const enter = () => {
+            el.toggleAttribute('data-lit', true)
             gsap.to(el, {
               z: LETTER_Z[i] + 90,
               y: -18,
@@ -73,7 +81,9 @@ export default function Logo3D() {
               ease: 'back.out(2.2)',
               overwrite: 'auto',
             })
-          const leave = () =>
+          }
+          const leave = () => {
+            el.toggleAttribute('data-lit', false)
             gsap.to(el, {
               z: LETTER_Z[i],
               y: 0,
@@ -84,11 +94,12 @@ export default function Logo3D() {
               ease: 'elastic.out(1, 0.45)',
               overwrite: 'auto',
             })
-          el.addEventListener('pointerenter', enter)
-          el.addEventListener('pointerleave', leave)
+          }
+          hit.addEventListener('pointerenter', enter)
+          hit.addEventListener('pointerleave', leave)
           return () => {
-            el.removeEventListener('pointerenter', enter)
-            el.removeEventListener('pointerleave', leave)
+            hit.removeEventListener('pointerenter', enter)
+            hit.removeEventListener('pointerleave', leave)
           }
         })
 
@@ -105,16 +116,13 @@ export default function Logo3D() {
 
   return (
     <div ref={root} aria-hidden className="relative mt-20 flex justify-center select-none [perspective:1400px]">
-      <div data-stage className="[transform-style:preserve-3d]">
-        <div
-          data-tilt
-          className="flex text-[clamp(5rem,23vw,21rem)] leading-[0.82] font-black tracking-[-0.04em] [font-family:'Asap_Sharp',sans-serif] [transform-style:preserve-3d]"
-        >
+      <div data-stage className="pointer-events-none [transform-style:preserve-3d]">
+        <div data-tilt className={`${TYPE} [transform-style:preserve-3d]`}>
           {[...WORD].map((ch, i) => (
             <span
               key={i}
               data-letter
-              className="logo3d-letter group relative inline-block px-[0.01em] [transform-style:preserve-3d]"
+              className="logo3d-letter relative inline-block px-[0.01em] [transform-style:preserve-3d]"
             >
               {/* extrusion: slices fading into the dark */}
               {Array.from({ length: DEPTH_LAYERS }).map((_, l) => (
@@ -134,6 +142,15 @@ export default function Logo3D() {
             </span>
           ))}
         </div>
+      </div>
+
+      {/* Static hit zones laid out exactly like the untransformed word */}
+      <div className={`absolute inset-0 justify-center text-transparent ${TYPE}`}>
+        {[...WORD].map((ch, i) => (
+          <span key={i} data-hit className="inline-block px-[0.01em]">
+            {ch}
+          </span>
+        ))}
       </div>
     </div>
   )
