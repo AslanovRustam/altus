@@ -15,6 +15,7 @@ import Footer from './components/Footer'
 import { initLenis, scrollToHash, setScrollLocked } from './lib/lenis'
 import { useLang } from './i18n'
 import type { TourId } from './data'
+import { blur } from './lib/motion'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -70,7 +71,7 @@ export default function App() {
 
   // Generic reveal for everything marked with data-reveal
   useGSAP(() => {
-    gsap.set('[data-reveal]', { autoAlpha: 0, y: 48, filter: 'blur(6px)' })
+    gsap.set('[data-reveal]', { autoAlpha: 0, y: 48, ...blur(6) })
     ScrollTrigger.batch('[data-reveal]', {
       start: 'top 88%',
       once: true,
@@ -78,7 +79,7 @@ export default function App() {
         gsap.to(batch, {
           autoAlpha: 1,
           y: 0,
-          filter: 'blur(0px)',
+          ...blur(0),
           duration: 1.3,
           stagger: 0.09,
           ease: 'expo.out',

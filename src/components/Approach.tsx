@@ -4,6 +4,7 @@ import { useGSAP } from '@gsap/react'
 import { STATS } from '../data'
 import { useLang } from '../i18n'
 import SectionLabel from './SectionLabel'
+import { blur } from '../lib/motion'
 
 /** Feed the cursor position to the card's glow (CSS vars, no re-render) */
 function trackGlow(e: React.PointerEvent<HTMLElement>) {
@@ -22,10 +23,10 @@ export default function Approach() {
     () => {
       gsap.fromTo(
         '[data-word]',
-        { opacity: 0.12, filter: 'blur(6px)' },
+        { opacity: 0.12, ...blur(6) },
         {
           opacity: 1,
-          filter: 'blur(0px)',
+          ...blur(0),
           stagger: 0.06,
           ease: 'none',
           scrollTrigger: {
@@ -73,7 +74,7 @@ export default function Approach() {
   return (
     <section ref={root} id="approach" className="relative pt-16 pb-32 md:pb-48">
       <div data-statement-wrap className="relative h-[170vh]">
-        <div className="sticky top-0 flex h-dvh items-center">
+        <div className="sticky top-0 flex h-svh items-center">
           <div className="mx-auto w-full max-w-[1440px] px-5 md:px-10">
             <SectionLabel index="01">{t.approach.label}</SectionLabel>
             <p className="max-w-[24ch] text-[clamp(2rem,5vw,4.6rem)] leading-[1.06] font-light tracking-[-0.03em] text-balance">

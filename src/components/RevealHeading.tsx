@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import SplitChars from './SplitChars'
+import { blur } from '../lib/motion'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -14,8 +15,8 @@ type Props = {
   accentClassName?: string
 }
 
-export const CHAR_FROM = { opacity: 0, yPercent: 55, rotateX: -85, filter: 'blur(10px)' }
-export const CHAR_TO = { opacity: 1, yPercent: 0, rotateX: 0, filter: 'blur(0px)' }
+export const CHAR_FROM = { opacity: 0, yPercent: 55, rotateX: -85, ...blur(10) }
+export const CHAR_TO = { opacity: 1, yPercent: 0, rotateX: 0, ...blur(0) }
 
 /**
  * Heading whose characters fall into place with a 3D tilt + blur when scrolled into view.

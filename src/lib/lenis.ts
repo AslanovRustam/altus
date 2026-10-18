@@ -3,6 +3,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
+// Mobile address bar show/hide resizes the viewport — don't recalculate every trigger for it
+ScrollTrigger.config({ ignoreMobileResize: true })
 
 let lenis: Lenis | null = null
 

@@ -57,17 +57,17 @@ export default function Header({ revealed }: { revealed: boolean }) {
 
   return (
     <>
-      <header
-        ref={headerRef}
-        className={[
-          'fixed inset-x-0 top-0 z-40 border-b transition-[background-color,border-color,backdrop-filter,box-shadow] duration-700 ease-out-expo',
-          scrolled || open
-            ? 'border-white/10 bg-ink/35 shadow-[0_10px_40px_-20px_rgb(0_0_0/0.6)] backdrop-blur-2xl backdrop-saturate-150'
-            : 'border-transparent bg-transparent',
-        ].join(' ')}
-      >
+      <header ref={headerRef} className="fixed inset-x-0 top-0 z-40">
+        {/* Glass lives on its own layer and only its opacity animates — animating
+            backdrop-filter itself is very expensive on mobile GPUs */}
         <div
-          className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-700 ease-out-expo md:px-10 ${
+          aria-hidden
+          className={`absolute inset-0 border-b border-white/10 bg-ink/35 shadow-[0_10px_40px_-20px_rgb(0_0_0/0.6)] backdrop-blur-2xl backdrop-saturate-150 transition-opacity duration-700 ease-out-expo ${
+            scrolled || open ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+        <div
+          className={`relative mx-auto flex max-w-[1440px] items-center justify-between px-5 transition-[height] duration-700 ease-out-expo md:px-10 ${
             scrolled ? 'h-16' : 'h-20 md:h-24'
           }`}
         >

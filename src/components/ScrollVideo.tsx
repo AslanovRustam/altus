@@ -239,7 +239,7 @@ export default function ScrollVideo({
 
   return (
     <>
-      <div className="fixed top-0 left-0 z-0 h-full w-full" aria-hidden>
+      <div className="fixed top-0 left-0 z-0 h-lvh w-full" aria-hidden>
         <video
           ref={videoRef}
           className={`h-full w-full object-cover ${className}`}

@@ -6,6 +6,7 @@ import { useLang } from '../i18n'
 import Arrow from './Arrow'
 import SplitChars from './SplitChars'
 import { CHAR_FROM, CHAR_TO } from './RevealHeading'
+import { blur } from '../lib/motion'
 
 export default function Hero({ revealed }: { revealed: boolean }) {
   const root = useRef<HTMLElement>(null)
@@ -18,7 +19,7 @@ export default function Hero({ revealed }: { revealed: boolean }) {
 
       if (!revealed) {
         gsap.set(chars, { ...CHAR_FROM, transformPerspective: 700, transformOrigin: '50% 100%' })
-        gsap.set(fades, { autoAlpha: 0, y: 28, filter: 'blur(8px)' })
+        gsap.set(fades, { autoAlpha: 0, y: 28, ...blur(8) })
       } else {
         gsap
           .timeline({ defaults: { ease: 'expo.out' } })
@@ -30,8 +31,8 @@ export default function Hero({ revealed }: { revealed: boolean }) {
           )
           .fromTo(
             fades,
-            { autoAlpha: 0, y: 28, filter: 'blur(8px)' },
-            { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 1.3, stagger: 0.09 },
+            { autoAlpha: 0, y: 28, ...blur(8) },
+            { autoAlpha: 1, y: 0, ...blur(0), duration: 1.3, stagger: 0.09 },
             0.45,
           )
       }
@@ -60,12 +61,12 @@ export default function Hero({ revealed }: { revealed: boolean }) {
 
   return (
     <section ref={root} id="top" className="relative h-[175vh] font-display">
-      <div className="sticky top-0 flex h-dvh flex-col justify-end overflow-hidden">
-        <div data-hero-content className="mx-auto w-full max-w-[1440px] px-5 pt-28 pb-8 md:px-10 md:pb-12">
+      <div className="sticky top-0 flex h-svh flex-col justify-end overflow-hidden">
+        <div data-hero-content className="mx-auto w-full max-w-[1440px] px-5 pt-24 pb-6 md:px-10 md:pt-28 md:pb-12">
           <div>
             <p
               data-hero-fade
-              className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs tracking-wider text-mist/85 backdrop-blur-md"
+              className="mb-5 inline-flex md:mb-7 items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs tracking-wider text-mist/85 backdrop-blur-md"
             >
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember opacity-60" />
@@ -77,7 +78,7 @@ export default function Hero({ revealed }: { revealed: boolean }) {
             <h1
               data-hero-title
               aria-label={`${t.hero.line1} ${t.hero.line2}`}
-              className="text-[clamp(2.6rem,7.4vw,7.6rem)] leading-[0.95] tracking-[-0.01em]"
+              className="text-[clamp(2.3rem,min(7.4vw,10svh),7.6rem)] leading-[0.95] tracking-[-0.01em]"
             >
               <span aria-hidden className="block">
                 <SplitChars text={t.hero.line1} />
@@ -88,13 +89,13 @@ export default function Hero({ revealed }: { revealed: boolean }) {
             </h1>
           </div>
 
-          <div className="mt-10 grid items-end gap-10 md:mt-12 lg:grid-cols-[1fr_auto]">
+          <div className="mt-6 grid items-end gap-10 md:mt-12 lg:grid-cols-[1fr_auto]">
             <div className="max-w-xl">
-              <p data-hero-fade className="text-base leading-relaxed text-mist/80 md:text-lg">
+              <p data-hero-fade className="text-[15px] leading-relaxed text-mist/80 md:text-lg">
                 {t.hero.lead}
               </p>
 
-              <div data-hero-fade className="mt-8 flex flex-wrap items-center gap-3">
+              <div data-hero-fade className="mt-6 flex flex-wrap items-center gap-3 md:mt-8">
                 <a
                   href="#tours"
                   onClick={(e) => go(e, '#tours')}
@@ -115,7 +116,7 @@ export default function Hero({ revealed }: { revealed: boolean }) {
               </div>
             </div>
 
-            <aside data-hero-fade className="glass w-full max-w-sm rounded-3xl p-6">
+            <aside data-hero-fade className="glass hidden w-full max-w-sm rounded-3xl p-6 md:block">
               <div className="flex items-center justify-between gap-4 text-xs tracking-wider text-mist/60 uppercase">
                 <span>{t.hero.card.label}</span>
                 <span className="text-ember">{t.hero.card.spots}</span>
@@ -139,7 +140,7 @@ export default function Hero({ revealed }: { revealed: boolean }) {
 
           <div
             data-hero-fade
-            className="mt-12 flex items-center justify-between border-t border-white/10 pt-6 text-xs tracking-wider text-mist/55 uppercase"
+            className="mt-8 flex items-center justify-between border-t border-white/10 pt-5 text-xs md:mt-12 md:pt-6 tracking-wider text-mist/55 uppercase"
           >
             <span className="flex items-center gap-3">
               <span className="relative h-8 w-px overflow-hidden bg-white/15">

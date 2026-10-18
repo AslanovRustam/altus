@@ -8,6 +8,7 @@ import { scrollToHash } from '../lib/lenis'
 import SectionLabel from './SectionLabel'
 import RevealHeading from './RevealHeading'
 import Arrow from './Arrow'
+import { blur } from '../lib/motion'
 
 const MAX_ALT = Math.max(...TOURS.map((t) => t.altitude))
 
@@ -47,12 +48,12 @@ export default function Tours({ onBook }: { onBook: (tour: TourId) => void }) {
       gsap.utils.toArray<HTMLElement>('[data-card]').forEach((card) => {
         gsap.fromTo(
           card,
-          { opacity: 0.35, scale: 0.9, rotate: 2.5, filter: 'blur(4px)' },
+          { opacity: 0.35, scale: 0.9, rotate: 2.5, ...blur(4) },
           {
             opacity: 1,
             scale: 1,
             rotate: 0,
-            filter: 'blur(0px)',
+            ...blur(0),
             ease: 'none',
             scrollTrigger: {
               trigger: card,
@@ -75,7 +76,7 @@ export default function Tours({ onBook }: { onBook: (tour: TourId) => void }) {
   }, [lang])
 
   return (
-    <section ref={root} id="tours" className="relative flex h-dvh flex-col justify-center overflow-hidden">
+    <section ref={root} id="tours" className="relative flex h-svh flex-col justify-center overflow-hidden">
       <div className="mx-auto flex w-full max-w-[1440px] flex-col justify-between gap-6 px-5 pt-20 md:flex-row md:items-end md:px-10">
         <div>
           <SectionLabel index="02">{t.tours.label}</SectionLabel>
